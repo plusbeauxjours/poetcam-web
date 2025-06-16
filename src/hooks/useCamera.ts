@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
-import { CameraError } from "@/types";
-import { CAMERA_CONFIG, ERROR_MESSAGES } from "@/constants";
+import { CameraError, CameraErrorType } from "@/types";
+import { CAMERA_CONFIG } from "@/constants";
 
 /**
  * react-webcam을 사용한 카메라 접근 훅
@@ -38,24 +38,24 @@ export function useCamera() {
 
   const handleUserMediaError = useCallback((err: string | DOMException) => {
     console.error("Camera access failed:", err);
-    let errorType: CameraError["type"] = "unknown";
-    let message = ERROR_MESSAGES.camera.unknown;
+    let errorType: CameraErrorType = "unknown";
+    let message = "카메라에 접근할 수 없습니다. 테스트 이미지를 사용합니다.";
 
     if (err instanceof DOMException) {
       if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
         errorType = "not-allowed";
-        message = ERROR_MESSAGES.camera.notAllowed;
+        message = "카메라 권한이 거부되었습니다. 테스트 이미지를 사용합니다.";
       } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
         errorType = "not-found";
-        message = ERROR_MESSAGES.camera.notFound;
+        message = "카메라를 찾을 수 없습니다. 테스트 이미지를 사용합니다.";
       }
     } else if (typeof err === "string") {
       if (err.includes("Permission denied") || err.includes("Not allowed")) {
         errorType = "not-allowed";
-        message = ERROR_MESSAGES.camera.notAllowed;
+        message = "카메라 권한이 거부되었습니다. 테스트 이미지를 사용합니다.";
       } else if (err.includes("Not found") || err.includes("No device")) {
         errorType = "not-found";
-        message = ERROR_MESSAGES.camera.notFound;
+        message = "카메라를 찾을 수 없습니다. 테스트 이미지를 사용합니다.";
       }
     }
 
