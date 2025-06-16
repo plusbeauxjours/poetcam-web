@@ -43,6 +43,35 @@ npm run dev:https
 - **카메라 사용 중**: 다른 애플리케이션에서 카메라 사용 종료
 - **카메라 없음**: 자동으로 테스트 이미지 모드로 전환
 
+### React Webcam 사용 예시
+
+`react-webcam` 패키지를 이용하면 카메라 권한을 간단히 요청할 수 있습니다.
+
+```bash
+npm install react-webcam
+```
+
+아래 예시에서는 권한이 부여되면 `onUserMedia` 콜백이 호출됩니다.
+
+```tsx
+import { useState } from "react";
+import Webcam from "react-webcam";
+
+export default function WebcamPermission() {
+  const [hasPermission, setHasPermission] = useState(false);
+
+  return (
+    <Webcam
+      audio={false}
+      onUserMedia={() => setHasPermission(true)}
+      onUserMediaError={(e) => console.error("Camera access denied", e)}
+    />
+  );
+}
+```
+
+`onUserMedia`가 호출되면 카메라 권한을 얻은 상태입니다.
+
 ## 프로젝트 구조
 
 ```
