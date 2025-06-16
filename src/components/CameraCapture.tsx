@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Webcam from "react-webcam";
 import { CameraCaptureProps } from "@/types";
 import { useCamera } from "@/hooks/useCamera";
+import { imageToBase64 } from "@/utils/image";
 import { CAMERA_CONFIG } from "@/constants";
 
 export default function CameraCapture({ onCapture }: CameraCaptureProps) {
@@ -11,6 +13,7 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
     videoConstraints,
     isReady,
     error,
+    useTestImage,
     isRetrying,
     permissionRequested,
     retryCamera,
@@ -18,6 +21,16 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
     handleUserMedia,
     handleUserMediaError,
   } = useCamera();
+
+  const handleTestImageCapture = async (): Promise<void> => {
+    try {
+      const testImageData = await imageToBase64("/testshot.png", CAMERA_CONFIG.imageQuality);
+      console.log("Using test image, data length:", testImageData.length);
+      onCapture(testImageData);
+    } catch (err) {
+      console.error("Failed to load test image:", err);
+    }
+  };
 
   const handleCameraCapture = (): void => {
     if (!webcamRef.current || !isReady) {
@@ -36,7 +49,11 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
   };
 
   const handleCapture = (): void => {
-    handleCameraCapture();
+    if (useTestImage) {
+      handleTestImageCapture();
+    } else {
+      handleCameraCapture();
+    }
   };
 
   // Chrome 브라우저 감지
@@ -59,8 +76,61 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
     );
   }
 
-  // 카메라 에러 렌더링
-  if (error) {
+  // 테스트 이미지 모드 렌더링
+  if (useTestImage) {
+    return (
+      <div className="flex flex-col items-center gap-4">
+        <div className="rounded-lg shadow-md overflow-hidden">
+          <Image
+            src="/testshot.png"
+            alt="Test image for poem generation"
+            width={400}
+            height={300}
+            className="max-w-full h-auto"
+            style={{ maxHeight: "400px" }}
+            priority
+          />
+        </div>
+
+        {error && (
+          <div className="text-yellow-600 text-center text-sm max-w-md" role="alert">
+            <p className="mb-2">{error.message}</p>
+
+            {/* Chrome 사용자를 위한 특별 안내 */}
+            {isChrome && error.type === "not-allowed" && (
+              <div className="text-xs text-gray-400 mt-3 p-3 bg-gray-800 rounded">
+                <p className="font-semibold mb-2">🔧 Chrome에서 카메라 허용하기:</p>
+                <ol className="text-left space-y-1 list-decimal list-inside">
+                  <li>주소창 왼쪽의 🔒 아이콘 클릭</li>
+                  <li>&ldquo;카메라&rdquo; 권한을 &ldquo;허용&rdquo;으로 변경</li>
+                  <li>페이지 새로고침</li>
+                </ol>
+              </div>
+            )}
+
+            {error.type !== "not-allowed" && (
+              <button
+                onClick={retryCamera}
+                className="mt-2 bg-gray-600 text-white px-3 py-1 rounded text-xs hover:bg-gray-500 transition-colors"
+                disabled={isRetrying}>
+                {isRetrying ? "재시도 중..." : "카메라 다시 시도"}
+              </button>
+            )}
+          </div>
+        )}
+
+        <button
+          onClick={handleCapture}
+          className="bg-white text-black px-6 py-2 rounded-full shadow-md font-semibold hover:bg-gray-100 transition-colors"
+          aria-label="테스트 이미지로 시 생성하기">
+          테스트 이미지로 시 생성하기
+        </button>
+      </div>
+    );
+  }
+
+  // 카메라 에러 렌더링 (테스트 이미지 사용하지 않는 경우)
+  if (error && !useTestImage) {
     return (
       <div className="flex flex-col items-center gap-4 p-4">
         <div className="text-red-500 text-center max-w-md" role="alert">

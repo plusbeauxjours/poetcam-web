@@ -33,17 +33,4 @@ body {
   .fade-in {
     animation: fade-in 1s ease-in forwards;
   }
-
-  @keyframes font-swap {
-    0%, 100% {
-      font-family: serif;
-    }
-    50% {
-      font-family: sans-serif;
-    }
-  }
-
-  .font-swap {
-    animation: font-swap 1s steps(2, jump-none) infinite;
-  }
 }
