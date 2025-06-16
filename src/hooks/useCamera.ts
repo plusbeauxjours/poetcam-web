@@ -185,12 +185,12 @@ export function useCamera() {
       return;
     }
 
-    // HTTPS 확인 (개발 환경 제외)
+    // 개발 환경에서는 HTTP에서도 카메라 접근 허용
+    const isProduction = process.env.NODE_ENV === "production";
     if (
       typeof window !== "undefined" &&
-      window.location.protocol === "http:" &&
-      window.location.hostname !== "localhost" &&
-      window.location.hostname !== "127.0.0.1"
+      isProduction &&
+      window.location.protocol === "http:"
     ) {
       console.warn("Camera requires HTTPS in production");
       setError({
