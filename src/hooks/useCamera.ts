@@ -152,15 +152,10 @@ export function useCamera() {
     initCamera();
   }, [stopCamera, initCamera]);
 
-  const requestPermission = useCallback(async () => {
+  const requestPermission = useCallback(() => {
     console.log("Requesting camera permission...");
     setPermissionRequested(true);
-
-    // 잠시 기다린 후 카메라 초기화 시작
-    setTimeout(() => {
-      initCamera();
-    }, 100);
-  }, [initCamera]);
+  }, []);
 
   useEffect(() => {
     // 자동으로 권한 요청하지 않고 사용자 액션 기다림
@@ -202,7 +197,7 @@ export function useCamera() {
       return;
     }
 
-    // 이미 initCamera가 requestPermission에서 호출되므로 여기서는 호출하지 않음
+    // initCamera는 권한 부여 후 외부에서 호출됩니다
     return () => {
       stopCamera();
     };
@@ -218,5 +213,6 @@ export function useCamera() {
     stopCamera,
     retryCamera,
     requestPermission,
+    initCamera,
   };
 }

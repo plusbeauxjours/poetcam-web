@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect } from "react";
 import { CameraCaptureProps } from "@/types";
 import { useCamera } from "@/hooks/useCamera";
+import { useWebcamPermission } from "@/hooks/useWebcamPermission";
 import { imageToBase64, captureVideoFrame } from "@/utils/image";
 import { CAMERA_CONFIG } from "@/constants";
 
@@ -16,7 +18,17 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
     permissionRequested,
     retryCamera,
     requestPermission,
+    initCamera,
   } = useCamera();
+
+  const { hasPermission, webcamElement, error: permissionError } =
+    useWebcamPermission();
+
+  useEffect(() => {
+    if (permissionRequested && hasPermission) {
+      initCamera();
+    }
+  }, [permissionRequested, hasPermission, initCamera]);
 
   const handleTestImageCapture = async (): Promise<void> => {
     try {
@@ -69,6 +81,18 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
           aria-label="카메라 권한 요청">
           카메라 권한 요청
         </button>
+      </div>
+    );
+  }
+
+  if (permissionRequested && !hasPermission) {
+    return (
+      <div className="flex flex-col items-center gap-4 p-4">
+        {webcamElement}
+        <p className="text-sm text-center">브라우저에서 카메라 권한을 허용해주세요.</p>
+        {permissionError && (
+          <p className="text-red-500 text-sm">{permissionError.message}</p>
+        )}
       </div>
     );
   }
