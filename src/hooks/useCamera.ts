@@ -12,6 +12,7 @@ export function useCamera() {
   const [error, setError] = useState<CameraError | null>(null);
   const [useTestImage, setUseTestImage] = useState(false);
   const [isRetrying, setIsRetrying] = useState(false);
+  const [permissionRequested, setPermissionRequested] = useState(false);
 
   const stopCamera = useCallback(() => {
     if (streamRef.current) {
@@ -150,7 +151,15 @@ export function useCamera() {
     initCamera();
   }, [stopCamera, initCamera]);
 
+  const requestPermission = useCallback(() => {
+    setPermissionRequested(true);
+  }, []);
+
   useEffect(() => {
+    if (!permissionRequested) {
+      return;
+    }
+
     // getUserMedia API 지원 확인
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       console.error("getUserMedia is not supported");
@@ -185,7 +194,7 @@ export function useCamera() {
     return () => {
       stopCamera();
     };
-  }, [initCamera, stopCamera]);
+  }, [initCamera, stopCamera, permissionRequested]);
 
   return {
     videoRef,
@@ -193,7 +202,9 @@ export function useCamera() {
     error,
     useTestImage,
     isRetrying,
+    permissionRequested,
     stopCamera,
     retryCamera,
+    requestPermission,
   };
 }

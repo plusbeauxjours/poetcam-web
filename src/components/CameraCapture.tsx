@@ -7,7 +7,16 @@ import { imageToBase64, captureVideoFrame } from "@/utils/image";
 import { CAMERA_CONFIG } from "@/constants";
 
 export default function CameraCapture({ onCapture }: CameraCaptureProps) {
-  const { videoRef, isReady, error, useTestImage, isRetrying, retryCamera } = useCamera();
+  const {
+    videoRef,
+    isReady,
+    error,
+    useTestImage,
+    isRetrying,
+    permissionRequested,
+    retryCamera,
+    requestPermission,
+  } = useCamera();
 
   const handleTestImageCapture = async (): Promise<void> => {
     try {
@@ -49,6 +58,20 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
     typeof window !== "undefined" &&
     /Chrome/.test(navigator.userAgent) &&
     /Google Inc/.test(navigator.vendor);
+
+  if (!permissionRequested) {
+    return (
+      <div className="flex flex-col items-center gap-4 p-4">
+        <p className="text-sm text-center">카메라 사용을 위해 권한이 필요합니다.</p>
+        <button
+          onClick={requestPermission}
+          className="bg-white text-black px-6 py-2 rounded-full shadow-md font-semibold hover:bg-gray-100 transition-colors"
+          aria-label="카메라 권한 요청">
+          카메라 권한 요청
+        </button>
+      </div>
+    );
+  }
 
   // 테스트 이미지 모드 렌더링
   if (useTestImage) {
