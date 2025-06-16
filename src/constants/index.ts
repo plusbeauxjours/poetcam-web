@@ -39,6 +39,12 @@ export const ERROR_MESSAGES = {
     notFound: "카메라를 찾을 수 없습니다. 테스트 이미지를 사용합니다.",
     notAllowed: "카메라 권한이 거부되었습니다. 테스트 이미지를 사용합니다.",
     unknown: "카메라에 접근할 수 없습니다. 테스트 이미지를 사용합니다.",
+    inUse: "카메라가 다른 애플리케이션에서 사용 중입니다. 테스트 이미지를 사용합니다.",
+    constraintError: "요청한 카메라 설정을 지원하지 않습니다. 테스트 이미지를 사용합니다.",
+    notSupported: "브라우저에서 카메라를 지원하지 않습니다. 테스트 이미지를 사용합니다.",
+    aborted: "카메라 접근이 중단되었습니다. 테스트 이미지를 사용합니다.",
+    httpsRequired: "HTTPS 환경에서만 카메라를 사용할 수 있습니다. 테스트 이미지를 사용합니다.",
+    apiNotSupported: "브라우저에서 카메라 API를 지원하지 않습니다. 테스트 이미지를 사용합니다.",
   },
   image: {
     invalidBase64: "Invalid base64 data",

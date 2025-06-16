@@ -1,62 +1,49 @@
 "use client";
 import { useEffect, useState } from "react";
+import { PoemDisplayProps } from "@/types";
+import { createTwitterShareUrl, copyToClipboard, showButtonFeedback } from "@/utils/share";
+import { createPoemStructuredData, addStructuredDataToDOM } from "@/utils/seo";
+import { ANIMATION_CONFIG } from "@/constants";
 
-interface Props {
-  poem: string;
-}
-
-export default function PoemDisplay({ poem }: Props) {
+export default function PoemDisplay({ poem }: PoemDisplayProps) {
   const lines = poem.trim().split(/\r?\n/);
-  const [visible, setVisible] = useState(0);
+  const [visibleLines, setVisibleLines] = useState(0);
 
   useEffect(() => {
-    setVisible(0);
+    setVisibleLines(0);
     const timer = setInterval(() => {
-      setVisible((v) => {
-        if (v >= lines.length) {
+      setVisibleLines((prevVisible) => {
+        if (prevVisible >= lines.length) {
           clearInterval(timer);
-          return v;
+          return prevVisible;
         }
-        return v + 1;
+        return prevVisible + 1;
       });
-    }, 700);
-    return () => clearInterval(timer);
-  }, [poem]);
+    }, ANIMATION_CONFIG.poemLineDelay);
 
-  const shareText = `${poem}\n\n#포엣캠 #AI시 #사진시 #감성시`;
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    shareText
-  )}&url=https://poetcam.vercel.app`;
+    return () => clearInterval(timer);
+  }, [poem, lines.length]);
 
   useEffect(() => {
-    if (visible >= lines.length) {
-      const structuredData = {
-        "@context": "https://schema.org",
-        "@type": "CreativeWork",
-        name: "AI 생성 시",
-        text: poem,
-        author: {
-          "@type": "SoftwareApplication",
-          name: "포엣캠 AI",
-        },
-        dateCreated: new Date().toISOString(),
-        genre: "시",
-        inLanguage: "ko",
-        creativeWorkStatus: "Published",
-      };
-
-      const existingScript = document.querySelector("script[data-poem-structured-data]");
-      if (existingScript) {
-        existingScript.remove();
-      }
-
-      const script = document.createElement("script");
-      script.type = "application/ld+json";
-      script.setAttribute("data-poem-structured-data", "true");
-      script.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(script);
+    if (visibleLines >= lines.length) {
+      const structuredData = createPoemStructuredData(poem);
+      addStructuredDataToDOM(structuredData);
     }
-  }, [visible, lines.length, poem]);
+  }, [visibleLines, lines.length, poem]);
+
+  const handleCopyPoem = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const button = event.currentTarget;
+    const success = await copyToClipboard(poem);
+
+    if (success) {
+      showButtonFeedback(button, "복사 완료!", ANIMATION_CONFIG.buttonFeedbackDelay);
+    } else {
+      showButtonFeedback(button, "복사 실패", ANIMATION_CONFIG.buttonFeedbackDelay);
+    }
+  };
+
+  const twitterShareUrl = createTwitterShareUrl(poem);
+  const isAnimationComplete = visibleLines >= lines.length;
 
   return (
     <article className="flex flex-col items-center gap-6">
@@ -67,11 +54,11 @@ export default function PoemDisplay({ poem }: Props) {
         <meta itemProp="inLanguage" content="ko" />
 
         <div itemProp="text">
-          {lines.map((line, idx) => (
+          {lines.map((line, index) => (
             <p
-              key={idx}
+              key={`poem-line-${index}`}
               className={`transition-opacity duration-700 text-center text-2xl md:text-3xl font-serif italic tracking-wide whitespace-pre-wrap ${
-                visible > idx ? "opacity-100" : "opacity-0"
+                visibleLines > index ? "opacity-100" : "opacity-0"
               }`}>
               {line}
             </p>
@@ -79,27 +66,19 @@ export default function PoemDisplay({ poem }: Props) {
         </div>
       </div>
 
-      {visible >= lines.length && (
+      {isAnimationComplete && (
         <nav className="flex gap-4" aria-label="시 공유 및 복사 옵션">
           <button
-            onClick={(event) => {
-              navigator.clipboard.writeText(poem);
-              const button = event?.target as HTMLButtonElement;
-              const originalText = button.textContent;
-              button.textContent = "복사 완료!";
-              setTimeout(() => {
-                button.textContent = originalText;
-              }, 2000);
-            }}
-            className="bg-white text-black px-4 py-2 rounded-full shadow hover:bg-gray-100 transition-colors"
+            onClick={handleCopyPoem}
+            className="bg-white text-black px-4 py-2 rounded-full shadow hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300"
             aria-label="시를 클립보드에 복사">
             시 복사하기
           </button>
           <a
-            href={twitterUrl}
+            href={twitterShareUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-blue-500 text-white px-4 py-2 rounded-full shadow hover:bg-blue-600 transition-colors"
+            className="bg-blue-500 text-white px-4 py-2 rounded-full shadow hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
             aria-label="트위터에 시 공유하기">
             X(트위터)에 공유
           </a>

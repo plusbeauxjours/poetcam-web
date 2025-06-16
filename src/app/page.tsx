@@ -5,15 +5,29 @@ import CameraCapture from "@/components/CameraCapture";
 import PoemDisplay from "@/components/PoemDisplay";
 import { generatePoem } from "@/lib/generatePoem";
 
-export default function Home() {
-  const [poem, setPoem] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+type AppState = "camera" | "loading" | "poem";
 
-  const handleCapture = async (image: string) => {
-    setLoading(true);
-    const result = await generatePoem(image);
-    setPoem(result);
-    setLoading(false);
+export default function Home() {
+  const [poem, setPoem] = useState<string>("");
+  const [appState, setAppState] = useState<AppState>("camera");
+
+  const handleImageCapture = async (image: string): Promise<void> => {
+    try {
+      setAppState("loading");
+      const generatedPoem = await generatePoem(image);
+      setPoem(generatedPoem);
+      setAppState("poem");
+    } catch (error) {
+      console.error("Failed to generate poem:", error);
+      // 에러 발생 시 카메라 상태로 돌아가기
+      setAppState("camera");
+      // TODO: 사용자에게 에러 메시지 표시하는 기능 추가
+    }
+  };
+
+  const resetToCamera = (): void => {
+    setPoem("");
+    setAppState("camera");
   };
 
   return (
@@ -21,29 +35,41 @@ export default function Home() {
       {/* SEO용 숨겨진 헤딩 */}
       <h1 className="sr-only">포엣캠 - AI가 사진을 보고 시를 써주는 서비스</h1>
 
-      {!poem && !loading && (
+      {appState === "camera" && (
         <section aria-label="사진 촬영 섹션">
           <h2 className="sr-only">사진을 촬영하여 AI 시 생성하기</h2>
-          <CameraCapture onCapture={handleCapture} />
+          <CameraCapture onCapture={handleImageCapture} />
         </section>
       )}
 
-      {loading && (
+      {appState === "loading" && (
         <section aria-label="시 생성 중" className="flex flex-col items-center gap-4">
-          <div className="h-8 w-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+          <div
+            className="h-8 w-8 border-4 border-white border-t-transparent rounded-full animate-spin"
+            role="status"
+            aria-label="로딩 중"
+          />
           <p>시를 쓰는 중이에요…</p>
         </section>
       )}
 
-      {poem && !loading && (
+      {appState === "poem" && poem && (
         <section aria-label="생성된 시">
           <h2 className="sr-only">AI가 생성한 시</h2>
-          <PoemDisplay poem={poem} />
+          <div className="flex flex-col items-center gap-6">
+            <PoemDisplay poem={poem} />
+            <button
+              onClick={resetToCamera}
+              className="mt-4 bg-gray-700 text-white px-4 py-2 rounded-full shadow hover:bg-gray-600 transition-colors"
+              aria-label="새로운 사진으로 다시 시작하기">
+              다시 찍기
+            </button>
+          </div>
         </section>
       )}
 
       {/* 페이지 하단 설명 */}
-      {!poem && !loading && (
+      {appState === "camera" && (
         <section className="text-center max-w-md px-4">
           <h2 className="text-xl mb-4 font-serif">AI가 당신의 사진을 시로 만들어드립니다</h2>
           <p className="text-gray-300 text-sm leading-relaxed">

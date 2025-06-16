@@ -11,11 +11,23 @@ const nextConfig: NextConfig = {
     formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // 로컬 이미지 허용
+    unoptimized: false,
   },
 
-  // 성능 최적화
+  // 성능 최적화 (CSS 최적화 비활성화)
   experimental: {
-    optimizeCss: true,
+    // optimizeCss: true, // 임시 비활성화
+  },
+
+  // ESLint 설정
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+
+  // TypeScript 설정
+  typescript: {
+    ignoreBuildErrors: false,
   },
 
   // 헤더 설정

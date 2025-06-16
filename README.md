@@ -1,39 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 포엣캠 (PoetCam)
 
-## Getting Started
+AI가 사진을 보고 시를 써주는 웹 애플리케이션입니다.
 
-First, run the development server:
+## 기능
+
+- 📸 실시간 카메라 캡처
+- 🤖 Claude AI 기반 한국어 시 생성
+- 📱 모바일 친화적 반응형 디자인
+- 🔗 소셜 미디어 공유 기능
+- ♿ 웹 접근성 지원
+
+## 개발 환경 실행
 
 ```bash
+# 기본 개발 서버 (HTTP)
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# HTTPS 개발 서버 (카메라 권한을 위해 권장)
+npm run dev:https
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 카메라 권한 문제 해결
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### Chrome 브라우저
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. 주소창 왼쪽의 🔒 또는 📷 아이콘 클릭
+2. "카메라" 권한을 "허용"으로 변경
+3. 페이지 새로고침
 
-## Learn More
+#### 개발 환경에서 HTTPS 사용
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev:https
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Chrome에서는 HTTPS 환경에서만 카메라 접근이 원활히 작동합니다
+- localhost는 예외적으로 HTTP에서도 작동하지만, HTTPS 사용을 권장합니다
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### 일반적인 카메라 문제
 
-## Deploy on Vercel
+- **권한 거부**: 브라우저 설정에서 카메라 권한 확인
+- **카메라 사용 중**: 다른 애플리케이션에서 카메라 사용 종료
+- **카메라 없음**: 자동으로 테스트 이미지 모드로 전환
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 프로젝트 구조
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# poetcam
-# poetcam
-# poetcam
+```
+src/
+├── app/                    # Next.js App Router
+├── components/             # React 컴포넌트
+├── hooks/                  # 커스텀 훅
+├── utils/                  # 유틸리티 함수
+├── types/                  # TypeScript 타입 정의
+├── constants/              # 상수값 관리
+└── lib/                    # 라이브러리 함수
+```
+
+## 기술 스택
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS
+- **AI**: Claude 3 Sonnet (Anthropic)
+- **Development**: Turbopack, ESLint
+
+## 환경 변수
+
+`.env.local` 파일을 생성하고 다음 환경 변수를 설정하세요:
+
+```env
+CLAUDE_API_KEY=your_claude_api_key_here
+```
+
+## 배포
+
+이 프로젝트는 Vercel에 최적화되어 있습니다:
+
+```bash
+npm run build
+npm run start
+```
+
+## SEO 최적화
+
+- Open Graph 메타태그
+- Twitter Card 지원
+- 구조화된 데이터 (Schema.org)
+- 시맨틱 HTML
+- 웹 접근성 (WCAG 준수)
+
+## 라이선스
+
+MIT License
