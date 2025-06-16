@@ -39,6 +39,7 @@ npm run dev:https
 
 #### Common Camera Issues
 
+
 - **Permission denied**: Check camera permissions in your browser settings
 - **Camera in use**: Close any other applications that might be using the camera
 - **No camera**: Automatically switches to a test image mode
