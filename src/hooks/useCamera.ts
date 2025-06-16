@@ -36,17 +36,27 @@ export function useCamera() {
     setUseTestImage(false);
   }, []);
 
-  const handleUserMediaError = useCallback((err: Error) => {
+  const handleUserMediaError = useCallback((err: string | DOMException) => {
     console.error("Camera access failed:", err);
     let errorType: CameraError["type"] = "unknown";
     let message = ERROR_MESSAGES.camera.unknown;
 
-    if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
-      errorType = "not-allowed";
-      message = ERROR_MESSAGES.camera.notAllowed;
-    } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
-      errorType = "not-found";
-      message = ERROR_MESSAGES.camera.notFound;
+    if (err instanceof DOMException) {
+      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+        errorType = "not-allowed";
+        message = ERROR_MESSAGES.camera.notAllowed;
+      } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+        errorType = "not-found";
+        message = ERROR_MESSAGES.camera.notFound;
+      }
+    } else if (typeof err === "string") {
+      if (err.includes("Permission denied") || err.includes("Not allowed")) {
+        errorType = "not-allowed";
+        message = ERROR_MESSAGES.camera.notAllowed;
+      } else if (err.includes("Not found") || err.includes("No device")) {
+        errorType = "not-found";
+        message = ERROR_MESSAGES.camera.notFound;
+      }
     }
 
     setError({ type: errorType, message });
