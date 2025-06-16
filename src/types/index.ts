@@ -1,10 +1,9 @@
 // 공통 타입 정의
-export type CameraErrorMessage =
-  typeof import("../constants").ERROR_MESSAGES.camera[keyof typeof import("../constants").ERROR_MESSAGES.camera];
+export type CameraErrorType = "not-found" | "not-allowed" | "unknown";
 
 export interface CameraError {
-  type: "not-found" | "not-allowed" | "unknown";
-  message: CameraErrorMessage;
+  type: CameraErrorType;
+  message: string;
 }
 
 export interface PoemGenerationResult {
