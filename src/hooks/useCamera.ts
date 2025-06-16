@@ -75,6 +75,7 @@ export function useCamera() {
     async (constraints?: MediaStreamConstraints) => {
       try {
         setIsRetrying(false);
+        setError(null);
 
         // 기본 제약 조건
         const defaultConstraints: MediaStreamConstraints = {
@@ -151,10 +152,22 @@ export function useCamera() {
     initCamera();
   }, [stopCamera, initCamera]);
 
-  const requestPermission = useCallback(() => {
+  const requestPermission = useCallback(async () => {
+    console.log("Requesting camera permission...");
     setPermissionRequested(true);
+
+    // 잠시 기다린 후 카메라 초기화 시작
+    setTimeout(() => {
+      initCamera();
+    }, 100);
+  }, [initCamera]);
+
+  useEffect(() => {
+    // 자동으로 권한 요청하지 않고 사용자 액션 기다림
+    console.log("Camera hook initialized, waiting for user permission request");
   }, []);
 
+  // 권한이 요청된 후에만 카메라 관련 체크 수행
   useEffect(() => {
     if (!permissionRequested) {
       return;
@@ -189,12 +202,11 @@ export function useCamera() {
       return;
     }
 
-    initCamera();
-
+    // 이미 initCamera가 requestPermission에서 호출되므로 여기서는 호출하지 않음
     return () => {
       stopCamera();
     };
-  }, [initCamera, stopCamera, permissionRequested]);
+  }, [permissionRequested, stopCamera]);
 
   return {
     videoRef,

@@ -2,7 +2,7 @@
 export const APP_CONFIG = {
   name: "포엣캠",
   description: "사진 한 장으로 감성적인 한국어 시를 만들어보세요",
-  url: "https://poetcam.vercel.app",
+  url: "https://poetcam.plusbeauxjours.com",
   twitterHandle: "@poetcam",
 } as const;
 
