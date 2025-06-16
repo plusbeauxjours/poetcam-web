@@ -1,14 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import Webcam from "react-webcam";
 import { CameraCaptureProps } from "@/types";
 import { useCamera } from "@/hooks/useCamera";
-import { imageToBase64, captureVideoFrame } from "@/utils/image";
+import { imageToBase64 } from "@/utils/image";
 import { CAMERA_CONFIG } from "@/constants";
 
 export default function CameraCapture({ onCapture }: CameraCaptureProps) {
   const {
-    videoRef,
+    webcamRef,
+    videoConstraints,
     isReady,
     error,
     useTestImage,
@@ -16,6 +18,8 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
     permissionRequested,
     retryCamera,
     requestPermission,
+    handleUserMedia,
+    handleUserMediaError,
   } = useCamera();
 
   const handleTestImageCapture = async (): Promise<void> => {
@@ -29,19 +33,18 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
   };
 
   const handleCameraCapture = (): void => {
-    const video = videoRef.current;
-    if (!video || !isReady) {
-      console.error("Video not ready for capture");
+    if (!webcamRef.current || !isReady) {
+      console.error("Webcam not ready for capture");
       return;
     }
 
-    const imageData = captureVideoFrame(video, CAMERA_CONFIG.imageQuality);
+    const imageData = webcamRef.current.getScreenshot();
 
     if (imageData) {
       console.log("Captured image data length:", imageData.length);
       onCapture(imageData);
     } else {
-      console.error("Failed to capture image from video");
+      console.error("Failed to capture image from webcam");
     }
   };
 
@@ -174,14 +177,16 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
         </div>
       )}
 
-      <video
-        ref={videoRef}
-        autoPlay
-        playsInline
-        muted
+      <Webcam
+        ref={webcamRef}
+        audio={false}
+        videoConstraints={videoConstraints}
+        screenshotFormat={CAMERA_CONFIG.imageFormat}
+        screenshotQuality={CAMERA_CONFIG.imageQuality}
+        onUserMedia={handleUserMedia}
+        onUserMediaError={handleUserMediaError}
         className="rounded-lg shadow-md"
         style={{ maxWidth: "100%", height: "auto" }}
-        aria-label="카메라 미리보기"
       />
 
       <button
