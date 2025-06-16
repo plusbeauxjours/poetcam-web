@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import FontCycleText from "@/components/FontCycleText";
 
 export default function Home() {
   const router = useRouter();
@@ -30,7 +31,10 @@ export default function Home() {
   }, [checked, granted, router]);
 
   return (
-    <main className="flex items-center justify-center min-h-screen bg-black text-white">
+    <main className="flex flex-col items-center justify-center gap-6 min-h-screen bg-black text-white p-4">
+      <h1 className="text-xl">
+        <FontCycleText text="AI가 당신의 사진을 시로 만들어드립니다." />
+      </h1>
       {checked && !granted ? (
         <p>설정탭에서 카메라 권한을 켜세요</p>
       ) : (
