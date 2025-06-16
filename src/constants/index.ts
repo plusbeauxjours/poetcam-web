@@ -63,3 +63,49 @@ export const SHARE_CONFIG = {
   hashtags: ["포엣캠", "AI시", "사진시", "감성시"],
   twitterBaseUrl: "https://twitter.com/intent/tweet",
 } as const;
+
+export const FONT_CONFIG = {
+  fonts: [
+    // 기본 시스템 폰트
+    "serif",
+    "sans-serif",
+    "monospace",
+    "cursive",
+    "fantasy",
+
+    // 한글 폰트
+    "Noto Serif KR",
+    "Noto Sans KR",
+    "Nanum Myeongjo",
+    "Nanum Gothic",
+    "Nanum Pen Script",
+    "Gaegu",
+    "Dongle",
+    "Poor Story",
+    "Sunflower",
+    "Single Day",
+
+    // 영문 폰트
+    "Playfair Display",
+    "Merriweather",
+    "Lora",
+    "Crimson Text",
+    "Libre Baskerville",
+    "Source Serif Pro",
+    "PT Serif",
+    "Roboto Slab",
+    "Open Sans",
+    "Montserrat",
+    "Raleway",
+    "Poppins",
+    "Quicksand",
+    "Dancing Script",
+    "Great Vibes",
+    "Pacifico",
+    "Satisfy",
+    "Caveat",
+    "Shadows Into Light",
+    "Permanent Marker",
+  ],
+  defaultFont: "Noto Serif KR",
+} as const;

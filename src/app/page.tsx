@@ -36,7 +36,7 @@ export default function Home() {
         <FontCycleText text="AI가 당신의 사진을 시로 만들어드립니다." />
       </h1>
       {checked && !granted ? (
-        <p>설정탭에서 카메라 권한을 켜세요</p>
+        <p className="text-sm text-gray-400">설정탭에서 카메라 권한을 켜세요</p>
       ) : (
         <p>카메라 권한을 확인하는 중...</p>
       )}

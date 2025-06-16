@@ -1,15 +1,165 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Noto_Serif_KR,
+  Noto_Sans_KR,
+  Nanum_Gothic,
+  Nanum_Pen_Script,
+  Gaegu,
+  Dongle,
+  Playfair_Display,
+  Merriweather,
+  Lora,
+  Crimson_Text,
+  Libre_Baskerville,
+  Source_Serif_4,
+  PT_Serif,
+  Roboto_Slab,
+  Open_Sans,
+  Montserrat,
+  Raleway,
+  Poppins,
+  Quicksand,
+  Dancing_Script,
+  Great_Vibes,
+  Pacifico,
+  Satisfy,
+  Caveat,
+  Shadows_Into_Light,
+  Permanent_Marker,
+} from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// 한글 폰트 (next/font/google 지원)
+const notoSerifKR = Noto_Serif_KR({
+  weight: ["200", "300", "400", "500", "600", "700", "900"],
   subsets: ["latin"],
+  variable: "--font-noto-serif-kr",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const notoSansKR = Noto_Sans_KR({
+  weight: ["100", "300", "400", "500", "700", "900"],
   subsets: ["latin"],
+  variable: "--font-noto-sans-kr",
+});
+const nanumGothic = Nanum_Gothic({
+  weight: ["400", "700", "800"],
+  subsets: ["latin"],
+  variable: "--font-nanum-gothic",
+});
+const nanumPenScript = Nanum_Pen_Script({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-nanum-pen-script",
+});
+const gaegu = Gaegu({
+  weight: ["300", "400", "700"],
+  subsets: ["latin"],
+  variable: "--font-gaegu",
+});
+const dongle = Dongle({
+  weight: ["300", "400", "700"],
+  subsets: ["latin"],
+  variable: "--font-dongle",
+});
+// 영문 폰트
+const playfairDisplay = Playfair_Display({
+  weight: ["400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-playfair-display",
+});
+const merriweather = Merriweather({
+  weight: ["300", "400", "700", "900"],
+  subsets: ["latin"],
+  variable: "--font-merriweather",
+});
+const lora = Lora({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-lora",
+});
+const crimsonText = Crimson_Text({
+  weight: ["400", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-crimson-text",
+});
+const libreBaskerville = Libre_Baskerville({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-libre-baskerville",
+});
+const sourceSerif4 = Source_Serif_4({
+  weight: ["200", "300", "400", "500", "600", "700", "900"],
+  subsets: ["latin"],
+  variable: "--font-source-serif-4",
+});
+const ptSerif = PT_Serif({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-pt-serif",
+});
+const robotoSlab = Roboto_Slab({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-roboto-slab",
+});
+const openSans = Open_Sans({
+  weight: ["300", "400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  variable: "--font-open-sans",
+});
+const montserrat = Montserrat({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+});
+const raleway = Raleway({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-raleway",
+});
+const poppins = Poppins({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-poppins",
+});
+const quicksand = Quicksand({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-quicksand",
+});
+const dancingScript = Dancing_Script({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-dancing-script",
+});
+const greatVibes = Great_Vibes({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-great-vibes",
+});
+const pacifico = Pacifico({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-pacifico",
+});
+const satisfy = Satisfy({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-satisfy",
+});
+const caveat = Caveat({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-caveat",
+});
+const shadowsIntoLight = Shadows_Into_Light({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-shadows-into-light",
+});
+const permanentMarker = Permanent_Marker({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-permanent-marker",
 });
 
 export const metadata: Metadata = {
@@ -129,8 +279,57 @@ export default function RootLayout({
             }),
           }}
         />
+
+        {/* Google Fonts for unsupported fonts */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Sunflower:wght@300;500;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body
+        className={`
+          ${notoSerifKR.variable}
+          ${notoSansKR.variable}
+          ${nanumGothic.variable}
+          ${nanumPenScript.variable}
+          ${gaegu.variable}
+          ${dongle.variable}
+          ${playfairDisplay.variable}
+          ${merriweather.variable}
+          ${lora.variable}
+          ${crimsonText.variable}
+          ${libreBaskerville.variable}
+          ${sourceSerif4.variable}
+          ${ptSerif.variable}
+          ${robotoSlab.variable}
+          ${openSans.variable}
+          ${montserrat.variable}
+          ${raleway.variable}
+          ${poppins.variable}
+          ${quicksand.variable}
+          ${dancingScript.variable}
+          ${greatVibes.variable}
+          ${pacifico.variable}
+          ${satisfy.variable}
+          ${caveat.variable}
+          ${shadowsIntoLight.variable}
+          ${permanentMarker.variable}
+          antialiased
+        `}>
+        {children}
+      </body>
     </html>
   );
 }

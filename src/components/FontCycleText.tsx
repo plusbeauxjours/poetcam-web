@@ -8,11 +8,9 @@ interface FontCycleTextProps {
 }
 
 const fonts = [
-  "serif",
-  "sans-serif",
-  "monospace",
-  "cursive",
-  "fantasy",
+  "var(--font-noto-serif-kr)",
+  "var(--font-nanum-pen-script)",
+  "var(--font-dancing-script)",
 ];
 
 export default function FontCycleText({ text, className }: FontCycleTextProps) {
@@ -21,7 +19,7 @@ export default function FontCycleText({ text, className }: FontCycleTextProps) {
   useEffect(() => {
     const id = setInterval(() => {
       setIndex((prev) => (prev + 1) % fonts.length);
-    }, 300);
+    }, 500);
     return () => clearInterval(id);
   }, []);
 
