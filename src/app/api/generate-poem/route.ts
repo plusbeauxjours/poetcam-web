@@ -17,7 +17,8 @@ export async function POST(req: Request) {
             { type: 'text', text: '다음 사진을 보고 한국어로 짧은 감성적인 시를 4행 정도로 써줘.' },
             {
               type: 'image',
-              source: { type: 'base64', media_type: 'image/png', data: base64 },
+              // Use the "base64" field as required by the Anthropic API
+              source: { type: 'base64', media_type: 'image/png', base64 },
             },
           ],
         },
