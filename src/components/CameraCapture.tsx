@@ -100,9 +100,9 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
 
   // 일반 카메라 모드 렌더링
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="relative w-screen h-screen max-w-screen max-h-screen overflow-hidden">
       {isRetrying && (
-        <div className="text-yellow-400 text-sm text-center">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 text-yellow-400 text-sm text-center z-10">
           <p>더 호환성 좋은 설정으로 카메라에 다시 접근하는 중...</p>
         </div>
       )}
@@ -115,25 +115,23 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
         screenshotQuality={CAMERA_CONFIG.imageQuality}
         onUserMedia={handleUserMedia}
         onUserMediaError={handleUserMediaError}
-        className="rounded-lg shadow-md"
-        style={{ maxWidth: "100%", height: "auto" }}
+        className="w-full h-full object-cover"
       />
 
       <button
         onClick={handleCapture}
         disabled={!isReady}
-        className={`px-6 py-2 rounded-full shadow-md font-semibold transition-colors ${
+        className={`absolute bottom-6 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full border-4 transition-colors ${
           isReady
-            ? "bg-white text-black hover:bg-gray-100"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            ? "bg-red-500 border-white"
+            : "bg-gray-500 border-gray-300 opacity-50 cursor-not-allowed"
         }`}
-        aria-label={isReady ? "사진 찍어서 시 생성하기" : "카메라 로딩 중"}>
-        {isReady ? "사진 찍기" : "카메라 로딩 중..."}
-      </button>
+        aria-label={isReady ? "사진 찍어서 시 생성하기" : "카메라 로딩 중"}
+      />
 
       {/* Chrome 사용자를 위한 하단 팁 */}
       {isChrome && isReady && (
-        <div className="text-xs text-gray-400 text-center max-w-xs">
+        <div className="absolute top-4 right-4 text-xs text-gray-400 text-right max-w-xs z-10">
           💡 Chrome에서 카메라가 작동하지 않으면 주소창의 카메라 아이콘을 확인해보세요
         </div>
       )}
