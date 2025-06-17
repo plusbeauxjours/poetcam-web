@@ -242,7 +242,7 @@ export const metadata: Metadata = {
     siteName: "포엣캠",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "https://poetcam.plusbeauxjours.com/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "포엣캠 - AI 시 창작 서비스",
@@ -254,7 +254,7 @@ export const metadata: Metadata = {
     title: "포엣캠 - AI가 사진을 보고 시를 써주는 서비스",
     description:
       "사진 한 장으로 감성적인 한국어 시를 만들어보세요. AI가 당신의 사진을 보고 아름다운 시를 창작해드립니다.",
-    images: ["/og-image.jpg"],
+    images: ["https://poetcam.plusbeauxjours.com/og-image.jpg"],
     creator: "@poetcam",
   },
   robots: {
