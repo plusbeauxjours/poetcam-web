@@ -267,9 +267,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION,
-  },
   alternates: {
     canonical: "https://poetcam.vercel.app",
   },
