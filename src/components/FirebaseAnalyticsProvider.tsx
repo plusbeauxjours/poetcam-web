@@ -1,10 +1,10 @@
 "use client";
 import { useEffect } from "react";
-import { analyticsPromise } from "@/firebase";
+import { analyticsPromise } from "@/lib/firebase";
 
 export default function FirebaseAnalyticsProvider() {
   useEffect(() => {
-    analyticsPromise;
+    analyticsPromise.then(() => {});
   }, []);
   return null;
 }

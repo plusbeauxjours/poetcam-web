@@ -46,7 +46,7 @@ export default function FontCycleText({ text, className }: FontCycleTextProps) {
     );
   }
 
-  let parts: React.ReactNode[] = [];
+  const parts: React.ReactNode[] = [];
   let rest = text;
   let aiUsed = false;
   let siUsed = false;

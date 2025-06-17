@@ -340,24 +340,6 @@ export default function RootLayout({
             }),
           }}
         />
-
-        {/* Google Fonts for unsupported fonts */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Sunflower:wght@300;500;700&display=swap"
-          rel="stylesheet"
-        />
       </head>
       <body
         className={`
