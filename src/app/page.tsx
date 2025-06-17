@@ -26,6 +26,12 @@ export default function Home() {
 
   useEffect(() => {
     if (checked && granted) {
+      // 페이지 플로우 진행 상태 저장
+      if (typeof sessionStorage !== "undefined") {
+        sessionStorage.setItem("flowStep", "shot");
+        sessionStorage.removeItem("poem");
+        sessionStorage.removeItem("image");
+      }
       router.replace("/shot");
     }
   }, [checked, granted, router]);

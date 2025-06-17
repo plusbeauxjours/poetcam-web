@@ -1,34 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import CameraCapture from "@/components/CameraCapture";
-import PoemDisplay from "@/components/PoemDisplay";
 import FontCycleText from "@/components/FontCycleText";
 import { generatePoem } from "@/lib/generatePoem";
-
-type AppState = "camera" | "loading" | "poem";
+type AppState = "camera" | "loading";
 
 export default function Home() {
-  const [poem, setPoem] = useState<string>("");
+  const router = useRouter();
   const [appState, setAppState] = useState<AppState>("camera");
+
+  useEffect(() => {
+    const step = sessionStorage.getItem("flowStep");
+    if (step !== "shot") {
+      router.replace("/");
+    }
+  }, [router]);
 
   const handleImageCapture = async (image: string): Promise<void> => {
     try {
       setAppState("loading");
       const generatedPoem = await generatePoem(image);
-      setPoem(generatedPoem);
-      setAppState("poem");
+      sessionStorage.setItem("poem", generatedPoem);
+      sessionStorage.setItem("image", image);
+      sessionStorage.setItem("flowStep", "result");
+      router.push("/result");
     } catch (error) {
       console.error("Failed to generate poem:", error);
-      // 에러 발생 시 카메라 상태로 돌아가기
       setAppState("camera");
-      // TODO: 사용자에게 에러 메시지 표시하는 기능 추가
     }
-  };
-
-  const resetToCamera = (): void => {
-    setPoem("");
-    setAppState("camera");
   };
 
   return (
@@ -54,20 +55,6 @@ export default function Home() {
         </section>
       )}
 
-      {appState === "poem" && poem && (
-        <section aria-label="생성된 시">
-          <h2 className="sr-only">AI가 생성한 시</h2>
-          <div className="flex flex-col items-center gap-6">
-            <PoemDisplay poem={poem} />
-            <button
-              onClick={resetToCamera}
-              className="mt-4 bg-gray-700 text-white px-4 py-2 rounded-full shadow hover:bg-gray-600 transition-colors"
-              aria-label="새로운 사진으로 다시 시작하기">
-              다시 찍기
-            </button>
-          </div>
-        </section>
-      )}
 
       {/* 페이지 하단 설명 */}
       {appState === "camera" && (
