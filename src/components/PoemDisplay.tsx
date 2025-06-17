@@ -11,7 +11,7 @@ import {
 import { createPoemStructuredData, addStructuredDataToDOM } from "@/utils/seo";
 import { ANIMATION_CONFIG } from "@/constants";
 
-export default function PoemDisplay({ poem }: PoemDisplayProps) {
+export default function PoemDisplay({ poem, showButtons = true }: PoemDisplayProps) {
   const lines = poem.trim().split(/\r?\n/);
   const [visibleLines, setVisibleLines] = useState(0);
 
@@ -74,7 +74,7 @@ export default function PoemDisplay({ poem }: PoemDisplayProps) {
         </div>
       </div>
 
-      {isAnimationComplete && (
+      {isAnimationComplete && showButtons && (
         <nav className="flex gap-4" aria-label="시 공유 및 복사 옵션">
           <button
             onClick={handleCopyPoem}
