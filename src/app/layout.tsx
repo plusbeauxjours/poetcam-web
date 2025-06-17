@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import {
   Noto_Serif_KR,
   Noto_Sans_KR,
-  Nanum_Gothic,
   Nanum_Pen_Script,
-  Gaegu,
-  Dongle,
   Playfair_Display,
   Merriweather,
   Lora,
@@ -51,25 +48,10 @@ const notoSansKR = Noto_Sans_KR({
   subsets: ["latin"],
   variable: "--font-noto-sans-kr",
 });
-const nanumGothic = Nanum_Gothic({
-  weight: ["400", "700", "800"],
-  subsets: ["latin"],
-  variable: "--font-nanum-gothic",
-});
 const nanumPenScript = Nanum_Pen_Script({
   weight: ["400"],
   subsets: ["latin"],
   variable: "--font-nanum-pen-script",
-});
-const gaegu = Gaegu({
-  weight: ["300", "400", "700"],
-  subsets: ["latin"],
-  variable: "--font-gaegu",
-});
-const dongle = Dongle({
-  weight: ["300", "400", "700"],
-  subsets: ["latin"],
-  variable: "--font-dongle",
 });
 const gowunDodum = Gowun_Dodum({
   weight: ["400"],
@@ -314,6 +296,21 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="포엣캠" />
 
+        {/* Google Fonts Link for Dongle */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&display=swap"
+          rel="stylesheet"
+        />
+        {/* Google Fonts Link for Gaegu & Nanum Gothic */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap"
+          rel="stylesheet"
+        />
+
         {/* 구조화된 데이터 */}
         <script
           type="application/ld+json"
@@ -345,10 +342,7 @@ export default function RootLayout({
         className={`
           ${notoSerifKR.variable}
           ${notoSansKR.variable}
-          ${nanumGothic.variable}
           ${nanumPenScript.variable}
-          ${gaegu.variable}
-          ${dongle.variable}
           ${gowunDodum.variable}
           ${gowunBatang.variable}
           ${doHyeon.variable}
