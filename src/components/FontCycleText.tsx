@@ -11,13 +11,10 @@ const fonts = [
   "var(--font-noto-serif-kr)",
   "var(--font-noto-sans-kr)",
   "var(--font-nanum-pen-script)",
-  "var(--font-gaegu)",
-  "var(--font-dongle)",
   "var(--font-gowun-dodum)",
   "var(--font-gowun-batang)",
   "var(--font-do-hyeon)",
   "var(--font-jua)",
-  "var(--font-song-myung)",
   "var(--font-hi-melody)",
 ];
 
