@@ -36,6 +36,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import FirebaseAnalyticsProvider from "@/components/FirebaseAnalyticsProvider";
+import Script from "next/script";
 
 // 한글 폰트 (next/font/google 지원)
 const notoSerifKR = Noto_Serif_KR({
@@ -241,7 +242,7 @@ export const metadata: Metadata = {
     siteName: "포엣캠",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "포엣캠 - AI 시 창작 서비스",
@@ -253,7 +254,7 @@ export const metadata: Metadata = {
     title: "포엣캠 - AI가 사진을 보고 시를 써주는 서비스",
     description:
       "사진 한 장으로 감성적인 한국어 시를 만들어보세요. AI가 당신의 사진을 보고 아름다운 시를 창작해드립니다.",
-    images: ["/og-image.jpg"],
+    images: ["/og-image.png"],
     creator: "@poetcam",
   },
   robots: {
@@ -280,6 +281,19 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          data-cookieconsent="analytics"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-GC16HW5C8Z');
+            `,
+          }}
+        />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2931981606209596"
