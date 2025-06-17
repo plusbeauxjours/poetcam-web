@@ -30,7 +30,6 @@ import {
   Gowun_Batang,
   Do_Hyeon,
   Jua,
-  Song_Myung,
   Hi_Melody,
   Gamja_Flower,
   Gugi,
@@ -39,6 +38,7 @@ import {
   Yeon_Sung,
 } from "next/font/google";
 import "./globals.css";
+import FirebaseAnalyticsProvider from "@/components/FirebaseAnalyticsProvider";
 
 // 한글 폰트 (next/font/google 지원)
 const notoSerifKR = Noto_Serif_KR({
@@ -90,11 +90,6 @@ const jua = Jua({
   weight: ["400"],
   subsets: ["latin"],
   variable: "--font-jua",
-});
-const songMyung = Song_Myung({
-  weight: ["400"],
-  subsets: ["latin"],
-  variable: "--font-song-myung",
 });
 const hiMelody = Hi_Melody({
   weight: ["400"],
@@ -376,7 +371,6 @@ export default function RootLayout({
           ${gowunBatang.variable}
           ${doHyeon.variable}
           ${jua.variable}
-          ${songMyung.variable}
           ${hiMelody.variable}
           ${gamjaFlower.variable}
           ${gugi.variable}
@@ -405,6 +399,7 @@ export default function RootLayout({
           ${permanentMarker.variable}
           antialiased
         `}>
+        <FirebaseAnalyticsProvider />
         {children}
       </body>
     </html>
