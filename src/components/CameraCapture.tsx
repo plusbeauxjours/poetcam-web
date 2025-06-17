@@ -100,7 +100,7 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
 
   // 일반 카메라 모드 렌더링
   return (
-    <div className="relative w-screen h-screen max-w-screen max-h-screen overflow-hidden">
+    <div className="relative w-screen h-dvh max-w-screen max-h-screen overflow-hidden">
       {isRetrying && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 text-yellow-400 text-sm text-center z-10">
           <p>더 호환성 좋은 설정으로 카메라에 다시 접근하는 중...</p>

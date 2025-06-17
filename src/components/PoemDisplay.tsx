@@ -39,7 +39,7 @@ export default function PoemDisplay({ poem }: PoemDisplayProps) {
 
   const handleCopyPoem = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const button = event.currentTarget;
-    const success = await copyToClipboard(poem);
+    const success = await copyToClipboard(poem + "\n\n" + "https://poetcam.plusbeauxjours.com");
 
     if (success) {
       showButtonFeedback(button, "복사 완료!", ANIMATION_CONFIG.buttonFeedbackDelay);
@@ -87,7 +87,7 @@ export default function PoemDisplay({ poem }: PoemDisplayProps) {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-blue-500 text-white px-4 py-2 rounded-full shadow hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
-          aria-label="트위터에 시 공유하기">
+            aria-label="트위터에 시 공유하기">
             X(트위터)에 공유
           </a>
           <a

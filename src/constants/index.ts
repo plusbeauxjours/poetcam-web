@@ -60,7 +60,7 @@ export const ERROR_MESSAGES = {
 
 // 공유 관련
 export const SHARE_CONFIG = {
-  hashtags: ["포엣캠", "AI시", "사진시", "감성시"],
+  hashtags: ["poetcam", "포엣캠", "plejourlabs", "AI시"],
   twitterBaseUrl: "https://twitter.com/intent/tweet",
   facebookBaseUrl: "https://www.facebook.com/sharer/sharer.php",
 } as const;
