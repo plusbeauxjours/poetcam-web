@@ -3,6 +3,6 @@ Allow: /
 
 # Sitemap
 Sitemap: https://poetcam.vercel.app/sitemap.xml
-
+ 
 # 크롤링 지연 설정 (서버 부하 방지)
 Crawl-delay: 1 
