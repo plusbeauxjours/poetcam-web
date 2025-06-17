@@ -1,7 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { PoemDisplayProps } from "@/types";
-import { createTwitterShareUrl, copyToClipboard, showButtonFeedback } from "@/utils/share";
+import {
+  createTwitterShareUrl,
+  createFacebookShareUrl,
+  shareViaWebAPI,
+  copyToClipboard,
+  showButtonFeedback,
+} from "@/utils/share";
 import { createPoemStructuredData, addStructuredDataToDOM } from "@/utils/seo";
 import { ANIMATION_CONFIG } from "@/constants";
 
@@ -43,6 +49,8 @@ export default function PoemDisplay({ poem }: PoemDisplayProps) {
   };
 
   const twitterShareUrl = createTwitterShareUrl(poem);
+  const facebookShareUrl = createFacebookShareUrl(poem);
+  const handleWebShare = () => shareViaWebAPI(poem);
   const isAnimationComplete = visibleLines >= lines.length;
 
   return (
@@ -79,9 +87,29 @@ export default function PoemDisplay({ poem }: PoemDisplayProps) {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-blue-500 text-white px-4 py-2 rounded-full shadow hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
-            aria-label="트위터에 시 공유하기">
+          aria-label="트위터에 시 공유하기">
             X(트위터)에 공유
           </a>
+          <a
+            href={facebookShareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-blue-700 text-white px-4 py-2 rounded-full shadow hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300"
+            aria-label="페이스북에 시 공유하기">
+            페이스북에 공유
+          </a>
+          <button
+            onClick={handleWebShare}
+            className="bg-yellow-400 text-black px-4 py-2 rounded-full shadow hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-200"
+            aria-label="카카오톡에 시 공유하기">
+            카카오톡에 공유
+          </button>
+          <button
+            onClick={handleWebShare}
+            className="bg-pink-500 text-white px-4 py-2 rounded-full shadow hover:bg-pink-600 transition-colors focus:outline-none focus:ring-2 focus:ring-pink-300"
+            aria-label="인스타그램에 시 공유하기">
+            인스타그램에 공유
+          </button>
         </nav>
       )}
     </article>
