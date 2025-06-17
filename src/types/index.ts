@@ -17,6 +17,7 @@ export interface CameraCaptureProps {
 
 export interface PoemDisplayProps {
   poem: string;
+  showButtons?: boolean;
 }
 
 // API 응답 타입
