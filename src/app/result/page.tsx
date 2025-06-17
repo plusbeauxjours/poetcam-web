@@ -80,7 +80,7 @@ export default function ResultPage() {
             <CopyIcon className="w-6 h-6" aria-hidden="true" />
           </button>
         </nav>
-        <p className="text-sm mt-4">plejourlabs 회사에서 만들었습니다.</p>
+        <p className="text-sm mt-4">ⓒ 2025 plejourlabs</p>
       </div>
     </main>
   );
