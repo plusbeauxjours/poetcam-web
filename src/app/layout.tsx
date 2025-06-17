@@ -207,7 +207,7 @@ const permanentMarker = Permanent_Marker({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://poetcam.vercel.app"),
+  metadataBase: new URL("https://poetcam.plusbeauxjours.com"),
   title: {
     default: "포엣캠 - AI가 사진을 보고 시를 써주는 서비스",
     template: "%s | 포엣캠",
@@ -235,7 +235,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://poetcam.vercel.app",
+    url: "https://poetcam.plusbeauxjours.com",
     title: "포엣캠 - AI가 사진을 보고 시를 써주는 서비스",
     description:
       "사진 한 장으로 감성적인 한국어 시를 만들어보세요. AI가 당신의 사진을 보고 아름다운 시를 창작해드립니다.",
@@ -269,7 +269,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://poetcam.vercel.app",
+    canonical: "https://poetcam.plusbeauxjours.com",
   },
 };
 
@@ -332,7 +332,7 @@ export default function RootLayout({
               name: "포엣캠",
               description:
                 "사진 한 장으로 감성적인 한국어 시를 만들어보세요. AI가 당신의 사진을 보고 아름다운 시를 창작해드립니다.",
-              url: "https://poetcam.vercel.app",
+              url: "https://poetcam.plusbeauxjours.com",
               applicationCategory: "Entertainment",
               operatingSystem: "Any",
               offers: {
