@@ -19,6 +19,39 @@ export function createTwitterShareUrl(poem: string): string {
 }
 
 /**
+ * 페이스북 공유 URL을 생성합니다
+ */
+export function createFacebookShareUrl(poem: string): string {
+  const shareText = `${poem}\n\n${SHARE_CONFIG.hashtags.map((tag) => `#${tag}`).join(" ")}`;
+
+  const params = new URLSearchParams({
+    u: APP_CONFIG.url,
+    quote: shareText,
+  });
+
+  return `${SHARE_CONFIG.facebookBaseUrl}?${params.toString()}`;
+}
+
+/**
+ * Web Share API를 사용하여 공유합니다
+ */
+export async function shareViaWebAPI(poem: string): Promise<void> {
+  if (!navigator.share) return;
+
+  const shareText = `${poem}\n\n${SHARE_CONFIG.hashtags.map((tag) => `#${tag}`).join(" ")}`;
+
+  try {
+    await navigator.share({
+      title: APP_CONFIG.name,
+      text: shareText,
+      url: APP_CONFIG.url,
+    });
+  } catch (error) {
+    console.error("Failed to share:", error);
+  }
+}
+
+/**
  * 클립보드에 텍스트를 복사합니다
  */
 export async function copyToClipboard(text: string): Promise<boolean> {

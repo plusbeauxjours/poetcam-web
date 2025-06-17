@@ -26,6 +26,17 @@ import {
   Caveat,
   Shadows_Into_Light,
   Permanent_Marker,
+  Gowun_Dodum,
+  Gowun_Batang,
+  Do_Hyeon,
+  Jua,
+  Song_Myung,
+  Hi_Melody,
+  Gamja_Flower,
+  Gugi,
+  Nanum_Brush_Script,
+  Black_Han_Sans,
+  Yeon_Sung,
 } from "next/font/google";
 import "./globals.css";
 
@@ -59,6 +70,61 @@ const dongle = Dongle({
   weight: ["300", "400", "700"],
   subsets: ["latin"],
   variable: "--font-dongle",
+});
+const gowunDodum = Gowun_Dodum({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-gowun-dodum",
+});
+const gowunBatang = Gowun_Batang({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-gowun-batang",
+});
+const doHyeon = Do_Hyeon({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-do-hyeon",
+});
+const jua = Jua({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-jua",
+});
+const songMyung = Song_Myung({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-song-myung",
+});
+const hiMelody = Hi_Melody({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-hi-melody",
+});
+const gamjaFlower = Gamja_Flower({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-gamja-flower",
+});
+const gugi = Gugi({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-gugi",
+});
+const nanumBrushScript = Nanum_Brush_Script({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-nanum-brush-script",
+});
+const blackHanSans = Black_Han_Sans({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-black-han-sans",
+});
+const yeonSung = Yeon_Sung({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-yeon-sung",
 });
 // 영문 폰트
 const playfairDisplay = Playfair_Display({
@@ -306,6 +372,17 @@ export default function RootLayout({
           ${nanumPenScript.variable}
           ${gaegu.variable}
           ${dongle.variable}
+          ${gowunDodum.variable}
+          ${gowunBatang.variable}
+          ${doHyeon.variable}
+          ${jua.variable}
+          ${songMyung.variable}
+          ${hiMelody.variable}
+          ${gamjaFlower.variable}
+          ${gugi.variable}
+          ${nanumBrushScript.variable}
+          ${blackHanSans.variable}
+          ${yeonSung.variable}
           ${playfairDisplay.variable}
           ${merriweather.variable}
           ${lora.variable}

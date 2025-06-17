@@ -13,6 +13,12 @@ const fonts = [
   "var(--font-nanum-pen-script)",
   "var(--font-gaegu)",
   "var(--font-dongle)",
+  "var(--font-gowun-dodum)",
+  "var(--font-gowun-batang)",
+  "var(--font-do-hyeon)",
+  "var(--font-jua)",
+  "var(--font-song-myung)",
+  "var(--font-hi-melody)",
 ];
 
 export default function FontCycleText({ text, className }: FontCycleTextProps) {

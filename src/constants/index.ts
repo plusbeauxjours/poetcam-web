@@ -62,6 +62,7 @@ export const ERROR_MESSAGES = {
 export const SHARE_CONFIG = {
   hashtags: ["포엣캠", "AI시", "사진시", "감성시"],
   twitterBaseUrl: "https://twitter.com/intent/tweet",
+  facebookBaseUrl: "https://www.facebook.com/sharer/sharer.php",
 } as const;
 
 export const FONT_CONFIG = {
@@ -84,6 +85,17 @@ export const FONT_CONFIG = {
     "Poor Story",
     "Sunflower",
     "Single Day",
+    "Gowun Dodum",
+    "Gowun Batang",
+    "Do Hyeon",
+    "Jua",
+    "Song Myung",
+    "Hi Melody",
+    "Gamja Flower",
+    "Gugi",
+    "Nanum Brush Script",
+    "Black Han Sans",
+    "Yeon Sung",
 
     // 영문 폰트
     "Playfair Display",
