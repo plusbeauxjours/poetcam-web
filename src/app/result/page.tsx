@@ -24,6 +24,12 @@ export default function ResultPage() {
 
     setPoem(storedPoem);
     setImage(storedImage);
+
+    // When leaving the result page via browser back, ensure the next page
+    // knows we returned to the shooting step
+    return () => {
+      sessionStorage.setItem("flowStep", "shot");
+    };
   }, [router]);
 
   const handleRestart = () => {

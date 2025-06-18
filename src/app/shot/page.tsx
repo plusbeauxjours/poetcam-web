@@ -15,7 +15,12 @@ export default function Home() {
     const step = sessionStorage.getItem("flowStep");
     if (step !== "shot") {
       router.replace("/");
+      return;
     }
+
+    // When navigating back from the result page, reset state and flow step
+    setAppState("camera");
+    sessionStorage.setItem("flowStep", "shot");
   }, [router]);
 
   const handleImageCapture = async (image: string): Promise<void> => {

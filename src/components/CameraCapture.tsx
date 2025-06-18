@@ -110,6 +110,7 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
       <Webcam
         ref={webcamRef}
         audio={false}
+        playsInline
         videoConstraints={videoConstraints}
         screenshotFormat={CAMERA_CONFIG.imageFormat}
         screenshotQuality={CAMERA_CONFIG.imageQuality}

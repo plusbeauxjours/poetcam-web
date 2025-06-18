@@ -16,7 +16,9 @@ export function useCamera() {
   const videoConstraints: MediaTrackConstraints = {
     width: { ideal: CAMERA_CONFIG.idealWidth },
     height: { ideal: CAMERA_CONFIG.idealHeight },
-    facingMode: "environment",
+    // Use ideal facingMode so Android devices can fall back to the
+    // available camera instead of failing to initialize
+    facingMode: { ideal: "environment" },
   };
 
   const stopCamera = useCallback(() => {
