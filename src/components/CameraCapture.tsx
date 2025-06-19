@@ -39,6 +39,18 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
     handleCameraCapture();
   };
 
+  const openSettings = (): void => {
+    const ua = navigator.userAgent || navigator.vendor || "";
+    if (/android/i.test(ua)) {
+      window.location.href =
+        "intent:#Intent;action=android.settings.APPLICATION_DETAILS_SETTINGS;end";
+    } else if (/iPad|iPhone|iPod/.test(ua)) {
+      window.location.href = "App-Prefs:root=Privacy&path=CAMERA";
+    } else {
+      alert("브라우저 설정에서 카메라 권한을 허용해주세요.");
+    }
+  };
+
   // Chrome 브라우저 감지
   const isChrome =
     typeof window !== "undefined" &&
@@ -93,6 +105,14 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
             aria-label="페이지 새로고침">
             새로고침
           </button>
+          {error.type === "not-allowed" && (
+            <button
+              onClick={openSettings}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+              aria-label="브라우저 설정 열기">
+              설정하기
+            </button>
+          )}
         </div>
       </div>
     );
