@@ -13,11 +13,11 @@ export function useCamera() {
   const [isRetrying, setIsRetrying] = useState(false);
   const [permissionRequested, setPermissionRequested] = useState(true);
 
-  const videoConstraints: MediaTrackConstraints = {
+  const [videoConstraints, setVideoConstraints] = useState<MediaTrackConstraints>({
     width: { ideal: CAMERA_CONFIG.idealWidth },
     height: { ideal: CAMERA_CONFIG.idealHeight },
-    facingMode: "environment",
-  };
+    facingMode: { ideal: "environment" },
+  });
 
   const stopCamera = useCallback(() => {
     const stream = webcamRef.current?.stream;
@@ -33,18 +33,36 @@ export function useCamera() {
     setError(null);
   }, []);
 
-  const handleUserMediaError = useCallback((err: string | DOMException) => {
-    console.error("Camera access failed:", err);
-    let errorType: CameraErrorType = "unknown";
-    let message = "카메라에 접근할 수 없습니다.";
+  const handleUserMediaError = useCallback(
+    (err: string | DOMException) => {
+      console.error("Camera access failed:", err);
+      let errorType: CameraErrorType = "unknown";
+      let message = "카메라에 접근할 수 없습니다.";
 
     if (err instanceof DOMException) {
       if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
         errorType = "not-allowed";
         message = "카메라 권한이 거부되었습니다.";
-      } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+      } else if (
+        err.name === "NotFoundError" ||
+        err.name === "DevicesNotFoundError" ||
+        err.name === "OverconstrainedError"
+      ) {
         errorType = "not-found";
         message = "카메라를 찾을 수 없습니다.";
+        // environment 카메라가 없으면 전면 카메라로 재시도
+        setVideoConstraints({
+          width: { ideal: CAMERA_CONFIG.idealWidth },
+          height: { ideal: CAMERA_CONFIG.idealHeight },
+          facingMode: { ideal: "user" },
+        });
+        setIsRetrying(true);
+        setPermissionRequested(false);
+        setTimeout(() => {
+          setPermissionRequested(true);
+          setIsRetrying(false);
+        }, 100);
+        return;
       }
     } else if (typeof err === "string") {
       if (err.includes("Permission denied") || err.includes("Not allowed")) {
@@ -66,10 +84,18 @@ export function useCamera() {
 
   const retryCamera = useCallback(() => {
     stopCamera();
-    setIsRetrying(false);
+    setIsRetrying(true);
     setError(null);
+    setVideoConstraints({
+      width: { ideal: CAMERA_CONFIG.idealWidth },
+      height: { ideal: CAMERA_CONFIG.idealHeight },
+      facingMode: { ideal: "user" },
+    });
     setPermissionRequested(false);
-    setTimeout(() => setPermissionRequested(true), 100);
+    setTimeout(() => {
+      setPermissionRequested(true);
+      setIsRetrying(false);
+    }, 100);
   }, [stopCamera]);
 
   return {
