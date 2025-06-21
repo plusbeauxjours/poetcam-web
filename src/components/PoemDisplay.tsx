@@ -65,9 +65,10 @@ export default function PoemDisplay({ poem, showButtons = true }: PoemDisplayPro
           {lines.map((line, index) => (
             <p
               key={`poem-line-${index}`}
-              className={`transition-opacity duration-700 text-center text-2xl md:text-3xl font-serif italic tracking-wide whitespace-pre-wrap ${
-                visibleLines > index ? "opacity-100" : "opacity-0"
-              }`}>
+              className={`text-center text-2xl md:text-3xl font-serif italic tracking-wide whitespace-pre-wrap ${
+                visibleLines > index ? "slide-up-fade" : "opacity-0"
+              }`}
+            >
               {line}
             </p>
           ))}

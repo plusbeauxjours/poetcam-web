@@ -35,16 +35,28 @@ export function createFacebookShareUrl(poem: string): string {
 /**
  * Web Share API를 사용하여 공유합니다
  */
-export async function shareViaWebAPI(poem: string): Promise<void> {
+export async function shareViaWebAPI(poem: string, imageDataUrl?: string): Promise<void> {
   if (!navigator.share) return;
 
   const shareText = `${poem}\n\n${SHARE_CONFIG.hashtags.map((tag) => `#${tag}`).join(" ")}`;
+
+  const files: File[] = [];
+  if (imageDataUrl) {
+    try {
+      const res = await fetch(imageDataUrl);
+      const blob = await res.blob();
+      files.push(new File([blob], "poetcam.jpg", { type: blob.type }));
+    } catch (error) {
+      console.error("Failed to process image for sharing:", error);
+    }
+  }
 
   try {
     await navigator.share({
       title: APP_CONFIG.name,
       text: shareText,
       url: APP_CONFIG.url,
+      files,
     });
   } catch (error) {
     console.error("Failed to share:", error);
