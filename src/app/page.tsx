@@ -12,6 +12,24 @@ export default function Home() {
   useEffect(() => {
     async function checkPermission() {
       try {
+        if (navigator.permissions && navigator.permissions.query) {
+          const status = await navigator.permissions.query({
+            name: "camera" as PermissionName,
+          });
+
+          if (status.state === "granted") {
+            setGranted(true);
+            setChecked(true);
+            return;
+          }
+
+          if (status.state === "denied") {
+            setGranted(false);
+            setChecked(true);
+            return;
+          }
+        }
+
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         stream.getTracks().forEach((t) => t.stop());
         setGranted(true);
