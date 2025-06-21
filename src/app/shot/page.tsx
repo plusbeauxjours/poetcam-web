@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import CameraCapture from "@/components/CameraCapture";
+import NativeCameraCapture from "@/components/NativeCameraCapture";
 import FontCycleText from "@/components/FontCycleText";
 import { generatePoem } from "@/lib/generatePoem";
 type AppState = "camera" | "loading";
@@ -38,7 +38,7 @@ export default function Home() {
       {appState === "camera" && (
         <section aria-label="사진 촬영 섹션">
           <h2 className="sr-only">사진을 촬영하여 AI 시 생성하기</h2>
-          <CameraCapture onCapture={handleImageCapture} />
+          <NativeCameraCapture onCapture={handleImageCapture} />
         </section>
       )}
 
