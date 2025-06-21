@@ -14,8 +14,6 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
     permissionRequested,
     retryCamera,
     requestPermission,
-    handleUserMedia,
-    handleUserMediaError,
   } = useCamera();
 
   const handleCameraCapture = (): void => {
@@ -105,18 +103,6 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
           <p>더 호환성 좋은 설정으로 카메라에 다시 접근하는 중...</p>
         </div>
       )}
-
-      <Webcam
-        ref={webcamRef}
-        audio={false}
-        muted
-        playsInline
-        screenshotFormat={CAMERA_CONFIG.imageFormat}
-        screenshotQuality={CAMERA_CONFIG.imageQuality}
-        onUserMedia={handleUserMedia}
-        onUserMediaError={handleUserMediaError}
-        className="w-full h-full object-cover"
-      />
 
       <button
         onClick={handleCapture}
