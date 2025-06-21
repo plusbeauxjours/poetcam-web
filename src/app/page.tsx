@@ -30,7 +30,7 @@ export default function Home() {
           }
         }
 
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: false });
         stream.getTracks().forEach((t) => t.stop());
         setGranted(true);
       } catch (err) {
