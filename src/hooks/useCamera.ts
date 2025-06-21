@@ -13,11 +13,11 @@ export function useCamera() {
   const [isRetrying, setIsRetrying] = useState(false);
   const [permissionRequested, setPermissionRequested] = useState(true);
 
-  const videoConstraints: MediaTrackConstraints = {
+  const [cameraConstraints, setCameraConstraints] = useState<MediaTrackConstraints>({
     width: { ideal: CAMERA_CONFIG.idealWidth },
     height: { ideal: CAMERA_CONFIG.idealHeight },
-    facingMode: "environment",
-  };
+    facingMode: { ideal: "environment" },
+  });
 
   const stopCamera = useCallback(() => {
     const stream = webcamRef.current?.stream;
@@ -42,9 +42,26 @@ export function useCamera() {
       if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
         errorType = "not-allowed";
         message = "카메라 권한이 거부되었습니다.";
-      } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+      } else if (
+        err.name === "NotFoundError" ||
+        err.name === "DevicesNotFoundError" ||
+        err.name === "OverconstrainedError"
+      ) {
         errorType = "not-found";
         message = "카메라를 찾을 수 없습니다.";
+        // environment 카메라가 없으면 전면 카메라로 재시도
+        setCameraConstraints({
+          width: { ideal: CAMERA_CONFIG.idealWidth },
+          height: { ideal: CAMERA_CONFIG.idealHeight },
+          facingMode: { ideal: "user" },
+        });
+        setIsRetrying(true);
+        setPermissionRequested(false);
+        setTimeout(() => {
+          setPermissionRequested(true);
+          setIsRetrying(false);
+        }, 100);
+        return;
       }
     } else if (typeof err === "string") {
       if (err.includes("Permission denied") || err.includes("Not allowed")) {
@@ -66,15 +83,23 @@ export function useCamera() {
 
   const retryCamera = useCallback(() => {
     stopCamera();
-    setIsRetrying(false);
+    setIsRetrying(true);
     setError(null);
+    setCameraConstraints({
+      width: { ideal: CAMERA_CONFIG.idealWidth },
+      height: { ideal: CAMERA_CONFIG.idealHeight },
+      facingMode: { ideal: "user" },
+    });
     setPermissionRequested(false);
-    setTimeout(() => setPermissionRequested(true), 100);
+    setTimeout(() => {
+      setPermissionRequested(true);
+      setIsRetrying(false);
+    }, 100);
   }, [stopCamera]);
 
   return {
     webcamRef,
-    videoConstraints,
+    cameraConstraints,
     isReady,
     error,
     isRetrying,

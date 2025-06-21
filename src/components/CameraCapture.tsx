@@ -8,7 +8,6 @@ import { CAMERA_CONFIG } from "@/constants";
 export default function CameraCapture({ onCapture }: CameraCaptureProps) {
   const {
     webcamRef,
-    videoConstraints,
     isReady,
     error,
     isRetrying,
@@ -110,7 +109,8 @@ export default function CameraCapture({ onCapture }: CameraCaptureProps) {
       <Webcam
         ref={webcamRef}
         audio={false}
-        videoConstraints={videoConstraints}
+        muted
+        playsInline
         screenshotFormat={CAMERA_CONFIG.imageFormat}
         screenshotQuality={CAMERA_CONFIG.imageQuality}
         onUserMedia={handleUserMedia}
