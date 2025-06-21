@@ -43,34 +43,33 @@ npm run dev:https
 - **Camera in use**: Close any other applications that might be using the camera
 - **No camera**: Automatically switches to a test image mode
 
-### React Webcam Example
+### Native Camera Example
 
-You can use the `react-webcam` package to easily request camera access.
-
-```bash
-npm install react-webcam
-```
-
-In the example below, the `onUserMedia` callback is triggered once permission is granted.
+This project now uses a custom camera component built on top of the HTML5 `MediaDevices` API instead of `react-webcam`.
 
 ```tsx
-import { useState } from "react";
-import Webcam from "react-webcam";
+import { useRef } from "react";
 
-export default function WebcamPermission() {
-  const [hasPermission, setHasPermission] = useState(false);
+export default function NativeCameraExample() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  async function start() {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+    }
+  }
 
   return (
-    <Webcam
-      audio={false}
-      onUserMedia={() => setHasPermission(true)}
-      onUserMediaError={(e) => console.error("Camera access denied", e)}
-    />
+    <>
+      <video ref={videoRef} autoPlay playsInline />
+      <button onClick={start}>Start Camera</button>
+    </>
   );
 }
 ```
 
-Once `onUserMedia` is called, you have access to the camera.
+Once the camera stream is started, you can capture frames using a canvas element.
 
 ## Project Structure
 
