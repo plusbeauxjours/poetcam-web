@@ -77,4 +77,11 @@ body {
   .font-swap {
     animation: font-swap 1s steps(2, jump-none) infinite;
   }
+
+  /* 모바일 브라우저에서 비디오 재생 컨트롤 숨기기 */
+  video::-webkit-media-controls-panel,
+  video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none;
+  }
 }
