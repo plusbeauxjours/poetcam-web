@@ -34,8 +34,8 @@ export default function ResultPage() {
   };
 
   const handleShare = () => {
-    if (poem) {
-      shareViaWebAPI(poem);
+    if (poem && image) {
+      shareViaWebAPI(poem, image);
     }
   };
 
@@ -59,7 +59,7 @@ export default function ResultPage() {
       <h1 className="sr-only">포엣캠 결과 페이지</h1>
       <div className="flex flex-col items-center gap-6">
         <img src={image} alt="촬영한 사진" className="max-w-full max-h-60 object-cover rounded" />
-        <PoemDisplay poem={poem} showButtons={false} />
+        <PoemDisplay poem={poem} showButtons />
         <nav className="flex gap-4 mt-4" aria-label="결과 조작 버튼">
           <button
             onClick={handleRestart}
