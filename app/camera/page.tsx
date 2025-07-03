@@ -66,9 +66,41 @@ export default function CameraPage() {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
       if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+        const video = videoRef.current;
+
+        // Set up event listeners before setting the stream
+        const handleLoadedMetadata = () => {
+          setCameraState("active");
+          cleanup();
+        };
+
+        const handleVideoError = () => {
+          console.error("Video loading error");
+          setCameraState("error");
+          setCameraError("unknown");
+          cleanup();
+        };
+
+        const cleanup = () => {
+          video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+          video.removeEventListener("error", handleVideoError);
+          if (timeoutId) clearTimeout(timeoutId);
+        };
+
+        // Set timeout to handle cases where video never loads
+        const timeoutId = setTimeout(() => {
+          console.warn("Video loading timeout");
+          setCameraState("error");
+          setCameraError("unknown");
+          cleanup();
+        }, 10000); // 10 second timeout
+
+        video.addEventListener("loadedmetadata", handleLoadedMetadata);
+        video.addEventListener("error", handleVideoError);
+
+        // Set the stream
+        video.srcObject = stream;
         streamRef.current = stream;
-        setCameraState("active");
 
         // Check for multiple cameras after getting permission
         await checkCameraDevices();
@@ -91,6 +123,7 @@ export default function CameraPage() {
     if (cameraState === "active") {
       stopCamera();
       setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
+      // Start camera with proper state management
       setTimeout(() => startCamera(), 100);
     }
   };
