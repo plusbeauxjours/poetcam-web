@@ -272,7 +272,7 @@ export default function CameraPage() {
       <div className="flex-1 flex flex-col items-center justify-center p-4">
         {!capturedImage ? (
           <div className="relative w-full max-w-sm aspect-[3/4] bg-gray-900 rounded-2xl overflow-hidden border-4 border-gray-700">
-            {cameraState === "error" ? (
+            {/* {cameraState === "error" ? (
               renderCameraError()
             ) : cameraState === "requesting" ? (
               <div className="w-full h-full flex items-center justify-center text-white">
@@ -292,74 +292,74 @@ export default function CameraPage() {
                   <p className="text-sm">촬영 중...</p>
                 </div>
               </div>
-            ) : cameraState === "active" ? (
-              <>
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="w-full h-full object-cover"
-                />
+            ) : cameraState === "active" ? ( */}
+            <>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-cover"
+              />
 
-                {/* Top Camera Controls Overlay */}
-                <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/50 to-transparent">
-                  <div className="flex justify-between items-center">
-                    {/* Flash Indicator */}
-                    {flashEnabled && (
-                      <div className="flex items-center space-x-1 bg-yellow-500/80 px-2 py-1 rounded-full">
-                        <Zap className="w-3 h-3 text-white" />
-                        <span className="text-xs text-white font-medium">Flash</span>
-                      </div>
-                    )}
-
-                    {!flashEnabled && <div />}
-
-                    {/* Camera Switch Button */}
-                    {hasMultipleCameras && (
-                      <Button
-                        onClick={switchCamera}
-                        variant="ghost"
-                        size="icon"
-                        className="w-10 h-10 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20">
-                        <RefreshCw className="w-5 h-5" />
-                      </Button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Grid Overlay */}
-                <div className="absolute inset-0 pointer-events-none">
-                  <div className="w-full h-full grid grid-cols-3 grid-rows-3">
-                    {Array.from({ length: 9 }).map((_, i) => (
-                      <div key={i} className="border border-white/30" />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bottom Camera Info Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
-                  <div className="flex justify-center items-center space-x-4">
-                    {/* Camera Status Indicator */}
-                    <div className="flex items-center space-x-2 bg-black/60 px-3 py-1 rounded-full backdrop-blur-sm">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-xs text-white font-medium">
-                        {facingMode === "user" ? "전면" : "후면"} 카메라
-                      </span>
+              {/* Top Camera Controls Overlay */}
+              <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/50 to-transparent">
+                <div className="flex justify-between items-center">
+                  {/* Flash Indicator */}
+                  {flashEnabled && (
+                    <div className="flex items-center space-x-1 bg-yellow-500/80 px-2 py-1 rounded-full">
+                      <Zap className="w-3 h-3 text-white" />
+                      <span className="text-xs text-white font-medium">Flash</span>
                     </div>
-                  </div>
-                </div>
+                  )}
 
-                {/* Focus Point Indicator (could be added for focus tap functionality) */}
-                <div className="absolute inset-0 pointer-events-none">
-                  {/* Center focus indicator */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <div className="w-16 h-16 border-2 border-white/40 rounded-full animate-pulse" />
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white/60 rounded-full" />
+                  {!flashEnabled && <div />}
+
+                  {/* Camera Switch Button */}
+                  {hasMultipleCameras && (
+                    <Button
+                      onClick={switchCamera}
+                      variant="ghost"
+                      size="icon"
+                      className="w-10 h-10 rounded-full bg-black/60 text-white hover:bg-black/80 backdrop-blur-sm border border-white/20">
+                      <RefreshCw className="w-5 h-5" />
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              {/* Grid Overlay */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="w-full h-full grid grid-cols-3 grid-rows-3">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <div key={i} className="border border-white/30" />
+                  ))}
+                </div>
+              </div>
+
+              {/* Bottom Camera Info Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
+                <div className="flex justify-center items-center space-x-4">
+                  {/* Camera Status Indicator */}
+                  <div className="flex items-center space-x-2 bg-black/60 px-3 py-1 rounded-full backdrop-blur-sm">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                    <span className="text-xs text-white font-medium">
+                      {facingMode === "user" ? "전면" : "후면"} 카메라
+                    </span>
                   </div>
                 </div>
-              </>
-            ) : (
+              </div>
+
+              {/* Focus Point Indicator (could be added for focus tap functionality) */}
+              <div className="absolute inset-0 pointer-events-none">
+                {/* Center focus indicator */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="w-16 h-16 border-2 border-white/40 rounded-full animate-pulse" />
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white/60 rounded-full" />
+                </div>
+              </div>
+            </>
+            {/* ) : (
               <div className="w-full h-full flex items-center justify-center text-white">
                 <div className="text-center">
                   <Camera className="w-16 h-16 mx-auto mb-4 text-gray-400" />
@@ -375,7 +375,7 @@ export default function CameraPage() {
                   </Button>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         ) : (
           <Card className="w-full max-w-sm aspect-[3/4] overflow-hidden border-0 shadow-2xl">
