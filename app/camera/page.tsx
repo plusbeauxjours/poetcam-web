@@ -2,26 +2,141 @@
 
 import type React from "react";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Camera, RotateCcw, ArrowLeft, Zap } from "lucide-react";
+import { Camera, RotateCcw, ArrowLeft, Zap, RefreshCw, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+type CameraError = "permission-denied" | "no-camera" | "unknown" | null;
+type CameraState = "idle" | "requesting" | "active" | "capturing" | "error";
+
 export default function CameraPage() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [isCapturing, setIsCapturing] = useState(false);
+  const [cameraState, setCameraState] = useState<CameraState>("idle");
+  const [cameraError, setCameraError] = useState<CameraError>(null);
+  const [facingMode, setFacingMode] = useState<"user" | "environment">("environment");
+  const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
+  const [flashEnabled, setFlashEnabled] = useState(false);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const handleCapture = () => {
-    setIsCapturing(true);
-    // 실제 카메라 기능 시뮬레이션
-    setTimeout(() => {
-      setCapturedImage("/placeholder.svg?height=400&width=300");
-      setIsCapturing(false);
-    }, 1000);
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+    setCameraState("idle");
+  };
+
+  const checkCameraDevices = async () => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter((device) => device.kind === "videoinput");
+      setHasMultipleCameras(videoDevices.length > 1);
+    } catch (error) {
+      console.error("Error checking camera devices:", error);
+    }
+  };
+
+  const startCamera = async () => {
+    setCameraState("requesting");
+    setCameraError(null);
+
+    try {
+      // Check if getUserMedia is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("Camera not supported");
+      }
+
+      const constraints: MediaStreamConstraints = {
+        video: {
+          facingMode: facingMode,
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+        },
+        audio: false,
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+        setCameraState("active");
+
+        // Check for multiple cameras after getting permission
+        await checkCameraDevices();
+      }
+    } catch (error: any) {
+      console.error("Error accessing camera:", error);
+      setCameraState("error");
+
+      if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+        setCameraError("permission-denied");
+      } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
+        setCameraError("no-camera");
+      } else {
+        setCameraError("unknown");
+      }
+    }
+  };
+
+  const switchCamera = async () => {
+    if (cameraState === "active") {
+      stopCamera();
+      setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
+      setTimeout(() => startCamera(), 100);
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current || cameraState !== "active") return;
+
+    setCameraState("capturing");
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    if (!context) return;
+
+    // Set canvas dimensions to match video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Apply flash effect
+    if (flashEnabled) {
+      const flashDiv = document.createElement("div");
+      flashDiv.style.position = "fixed";
+      flashDiv.style.top = "0";
+      flashDiv.style.left = "0";
+      flashDiv.style.width = "100%";
+      flashDiv.style.height = "100%";
+      flashDiv.style.backgroundColor = "white";
+      flashDiv.style.zIndex = "9999";
+      flashDiv.style.opacity = "0.8";
+      document.body.appendChild(flashDiv);
+
+      setTimeout(() => {
+        document.body.removeChild(flashDiv);
+      }, 150);
+    }
+
+    // Draw video frame to canvas
+    context.drawImage(video, 0, 0);
+
+    // Convert to data URL
+    const imageDataUrl = canvas.toDataURL("image/jpeg", 0.9);
+    setCapturedImage(imageDataUrl);
+
+    // Stop camera after capture
+    stopCamera();
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +145,7 @@ export default function CameraPage() {
       const reader = new FileReader();
       reader.onload = (e) => {
         setCapturedImage(e.target?.result as string);
+        stopCamera();
       };
       reader.readAsDataURL(file);
     }
@@ -41,6 +157,69 @@ export default function CameraPage() {
 
   const retakePhoto = () => {
     setCapturedImage(null);
+    setCameraState("idle");
+  };
+
+  const requestPermissionAgain = () => {
+    setCameraError(null);
+    startCamera();
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      stopCamera();
+    };
+  }, []);
+
+  const renderCameraError = () => {
+    if (cameraError === "permission-denied") {
+      return (
+        <div className="text-center text-white p-8">
+          <AlertCircle className="w-16 h-16 mx-auto mb-4 text-yellow-400" />
+          <h3 className="text-lg font-semibold mb-2">카메라 권한이 필요합니다</h3>
+          <p className="text-sm text-white/80 mb-6">
+            사진 촬영을 위해 카메라 접근 권한을 허용해주세요. 브라우저 설정에서 카메라 권한을
+            확인해보세요.
+          </p>
+          <Button
+            onClick={requestPermissionAgain}
+            className="bg-rose-500 hover:bg-rose-600 text-white">
+            다시 시도
+          </Button>
+        </div>
+      );
+    }
+
+    if (cameraError === "no-camera") {
+      return (
+        <div className="text-center text-white p-8">
+          <Camera className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+          <h3 className="text-lg font-semibold mb-2">카메라를 찾을 수 없습니다</h3>
+          <p className="text-sm text-white/80 mb-6">카메라가 연결되어 있는지 확인해주세요.</p>
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            className="bg-rose-500 hover:bg-rose-600 text-white">
+            갤러리에서 선택
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="text-center text-white p-8">
+        <AlertCircle className="w-16 h-16 mx-auto mb-4 text-red-400" />
+        <h3 className="text-lg font-semibold mb-2">카메라 오류</h3>
+        <p className="text-sm text-white/80 mb-6">
+          카메라를 시작할 수 없습니다. 다시 시도해주세요.
+        </p>
+        <Button
+          onClick={requestPermissionAgain}
+          className="bg-rose-500 hover:bg-rose-600 text-white">
+          다시 시도
+        </Button>
+      </div>
+    );
   };
 
   return (
@@ -60,44 +239,80 @@ export default function CameraPage() {
       <div className="flex-1 flex flex-col items-center justify-center p-4">
         {!capturedImage ? (
           <div className="relative w-full max-w-sm aspect-[3/4] bg-gray-900 rounded-2xl overflow-hidden border-4 border-gray-700">
-            {/* Camera Preview Placeholder */}
-            <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-              {isCapturing ? (
-                <div className="text-center text-white">
+            {cameraState === "error" ? (
+              renderCameraError()
+            ) : cameraState === "requesting" ? (
+              <div className="w-full h-full flex items-center justify-center text-white">
+                <div className="text-center">
+                  <div className="animate-spin mb-4">
+                    <RefreshCw className="w-16 h-16 mx-auto text-rose-400" />
+                  </div>
+                  <p className="text-sm">카메라 권한 요청 중...</p>
+                </div>
+              </div>
+            ) : cameraState === "capturing" ? (
+              <div className="w-full h-full flex items-center justify-center text-white">
+                <div className="text-center">
                   <div className="animate-pulse mb-4">
                     <Camera className="w-16 h-16 mx-auto text-rose-400" />
                   </div>
                   <p className="text-sm">촬영 중...</p>
                 </div>
-              ) : (
-                <div className="text-center text-gray-400">
-                  <Camera className="w-16 h-16 mx-auto mb-4" />
-                  <p className="text-sm">카메라 뷰</p>
-                </div>
-              )}
-            </div>
-
-            {/* Overlay Grid */}
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="w-full h-full grid grid-cols-3 grid-rows-3">
-                {Array.from({ length: 9 }).map((_, i) => (
-                  <div key={i} className="border border-white/20" />
-                ))}
               </div>
-            </div>
+            ) : cameraState === "active" ? (
+              <>
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
+                {/* Camera Controls Overlay */}
+                {hasMultipleCameras && (
+                  <Button
+                    onClick={switchCamera}
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 text-white hover:bg-black/70">
+                    <RefreshCw className="w-5 h-5" />
+                  </Button>
+                )}
+                {/* Grid Overlay */}
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="w-full h-full grid grid-cols-3 grid-rows-3">
+                    {Array.from({ length: 9 }).map((_, i) => (
+                      <div key={i} className="border border-white/20" />
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-white">
+                <div className="text-center">
+                  <Camera className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                  <p className="text-sm mb-4">
+                    카메라를 시작하려면
+                    <br />
+                    촬영 버튼을 눌러주세요
+                  </p>
+                  <Button
+                    onClick={startCamera}
+                    className="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded-full">
+                    카메라 시작
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <Card className="w-full max-w-sm aspect-[3/4] overflow-hidden border-0 shadow-2xl">
-            <img
-              src={capturedImage || "/placeholder.svg"}
-              alt="촬영된 사진"
-              className="w-full h-full object-cover"
-            />
+            <img src={capturedImage} alt="촬영된 사진" className="w-full h-full object-cover" />
           </Card>
         )}
 
         {/* Capture Instructions */}
-        {!capturedImage && !isCapturing && (
+        {!capturedImage && cameraState === "active" && (
           <div className="mt-8 text-center text-white/80">
             <p className="text-sm mb-2">감성적인 순간을 포착해보세요</p>
             <p className="text-xs text-white/60">사진이 아름다운 시로 변환됩니다</p>
@@ -120,8 +335,8 @@ export default function CameraPage() {
 
             {/* Capture Button */}
             <Button
-              onClick={handleCapture}
-              disabled={isCapturing}
+              onClick={cameraState === "active" ? capturePhoto : startCamera}
+              disabled={cameraState === "requesting" || cameraState === "capturing"}
               className="w-20 h-20 rounded-full bg-white hover:bg-gray-100 shadow-lg disabled:opacity-50">
               <div className="w-16 h-16 rounded-full border-4 border-gray-300 bg-white" />
             </Button>
@@ -130,7 +345,10 @@ export default function CameraPage() {
             <Button
               variant="ghost"
               size="icon"
-              className="w-12 h-12 rounded-full bg-white/20 text-white hover:bg-white/30">
+              className={`w-12 h-12 rounded-full text-white hover:bg-white/30 ${
+                flashEnabled ? "bg-yellow-500/50" : "bg-white/20"
+              }`}
+              onClick={() => setFlashEnabled(!flashEnabled)}>
               <Zap className="w-6 h-6" />
             </Button>
           </div>
@@ -152,14 +370,16 @@ export default function CameraPage() {
         )}
       </div>
 
-      {/* Hidden File Input */}
+      {/* Hidden Elements */}
       <input
         ref={fileInputRef}
         type="file"
         accept="image/*"
+        capture="environment"
         onChange={handleFileSelect}
         className="hidden"
       />
+      <canvas ref={canvasRef} className="hidden" />
     </div>
   );
 }
