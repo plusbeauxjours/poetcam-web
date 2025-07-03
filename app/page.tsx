@@ -1,103 +1,123 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Camera, ImageIcon, BookOpen, Settings, Sparkles, Crown } from "lucide-react"
+import Link from "next/link"
+
+export default function HomePage() {
+  const [recentPoems] = useState([
+    { id: 1, image: "/placeholder.svg?height=100&width=100", preview: "노을이 지는 하늘에\n당신의 미소가 번진다..." },
+    { id: 2, image: "/placeholder.svg?height=100&width=100", preview: "커피 한 잔의 여유\n오늘도 흘러간다..." },
+    { id: 3, image: "/placeholder.svg?height=100&width=100", preview: "비 내리는 창가에서\n그리움이 자란다..." },
+  ])
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-rose-50 to-amber-50">
+      {/* Header */}
+      <div className="flex justify-between items-center p-6 pt-12">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Poetcam</h1>
+          <p className="text-sm text-gray-500">감성을 담는 카메라</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="flex space-x-2">
+          <Link href="/collection">
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <BookOpen className="w-5 h-5 text-gray-600" />
+            </Button>
+          </Link>
+          <Link href="/settings">
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Settings className="w-5 h-5 text-gray-600" />
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="px-6 space-y-8">
+        {/* Hero Section */}
+        <div className="text-center py-12">
+          <div className="mb-6">
+            <Sparkles className="w-12 h-12 text-rose-400 mx-auto mb-4" />
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">📸 지금 감성을 찍어보세요</h2>
+            <p className="text-gray-600">당신의 순간이 아름다운 시가 됩니다</p>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="space-y-4">
+          <Link href="/camera">
+            <Card className="p-6 bg-gradient-to-r from-rose-400 to-pink-500 border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="flex items-center justify-center space-x-4 text-white">
+                <Camera className="w-8 h-8" />
+                <div className="text-center">
+                  <h3 className="text-xl font-bold">카메라로 촬영하기</h3>
+                  <p className="text-rose-100">새로운 순간을 포착해보세요</p>
+                </div>
+              </div>
+            </Card>
+          </Link>
+
+          <Link href="/upload">
+            <Card className="p-6 bg-white border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center justify-center space-x-4 text-gray-700">
+                <ImageIcon className="w-8 h-8 text-purple-400" />
+                <div className="text-center">
+                  <h3 className="text-xl font-bold">갤러리에서 가져오기</h3>
+                  <p className="text-gray-500">저장된 사진으로 시 만들기</p>
+                </div>
+              </div>
+            </Card>
+          </Link>
+        </div>
+
+        {/* Premium Banner */}
+        <Card className="p-4 bg-gradient-to-r from-purple-100 to-indigo-100 border border-purple-200">
+          <div className="flex items-center space-x-3">
+            <Crown className="w-6 h-6 text-purple-500" />
+            <div className="flex-1">
+              <h4 className="font-semibold text-purple-800">프리미엄으로 업그레이드</h4>
+              <p className="text-sm text-purple-600">무제한 시 생성 + 고급 템플릿</p>
+            </div>
+            <Button size="sm" className="bg-purple-500 hover:bg-purple-600 text-white">
+              업그레이드
+            </Button>
+          </div>
+        </Card>
+
+        {/* Recent Poems */}
+        {recentPoems.length > 0 && (
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">최근 만든 시</h3>
+            <div className="space-y-3">
+              {recentPoems.map((poem) => (
+                <Card key={poem.id} className="p-4 bg-white border border-gray-100 hover:shadow-md transition-shadow">
+                  <div className="flex space-x-4">
+                    <img
+                      src={poem.image || "/placeholder.svg"}
+                      alt="시 이미지"
+                      className="w-16 h-16 rounded-lg object-cover"
+                    />
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{poem.preview}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+            <Link href="/collection">
+              <Button variant="outline" className="w-full mt-4 border-gray-200 bg-transparent">
+                모든 시 보기
+              </Button>
+            </Link>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom Spacing */}
+      <div className="h-20" />
     </div>
-  );
+  )
 }
